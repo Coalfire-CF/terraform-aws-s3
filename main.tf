@@ -1,6 +1,3 @@
-##----------------------------------------------------------------------------------
-## Terraform resource to create S3 bucket with different combination type specific features.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket" "s3_default" {
   count = var.create_bucket == true ? 1 : 0
 
@@ -8,27 +5,14 @@ resource "aws_s3_bucket" "s3_default" {
   force_destroy = var.force_destroy
   tags          = var.tags
 
-  dynamic "object_lock_configuration" {
-    for_each = var.object_lock_configuration != null ? [1] : []
-
-    content {
-      object_lock_enabled = "Enabled"
-    }
-  }
 }
 
-##----------------------------------------------------------------------------------
-## Terraform resource which creates policy for S3 bucket on AWS.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_policy" "s3_default" {
   count  = var.bucket_policy == true ? 1 : 0
   bucket = join("", aws_s3_bucket.s3_default.*.id)
   policy = var.aws_iam_policy_document
 }
 
-##----------------------------------------------------------------------------------
-## Provides an S3 bucket accelerate configuration resource.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_accelerate_configuration" "example" {
   count = var.create_bucket && var.acceleration_status == true ? 1 : 0
 
@@ -36,9 +20,6 @@ resource "aws_s3_bucket_accelerate_configuration" "example" {
   status = "Enabled"
 }
 
-##----------------------------------------------------------------------------------
-## Provides an S3 bucket request payment configuration resource.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_request_payment_configuration" "example" {
   count = var.create_bucket && var.request_payer == true ? 1 : 0
 
@@ -59,9 +40,6 @@ resource "aws_s3_bucket_versioning" "example" {
   }
 }
 
-##----------------------------------------------------------------------------------
-## Provides an S3 bucket (server access) logging resource.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_logging" "example" {
   count  = var.create_bucket && var.logging == true ? 1 : 0
   bucket = join("", aws_s3_bucket.s3_default.*.id)
@@ -70,9 +48,6 @@ resource "aws_s3_bucket_logging" "example" {
   target_prefix = var.target_prefix
 }
 
-##----------------------------------------------------------------------------------
-## Provides a S3 bucket server-side encryption configuration resource.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
   count  = var.create_bucket && var.enable_server_side_encryption == true ? 1 : 0
   bucket = join("", aws_s3_bucket.s3_default.*.id)
@@ -85,9 +60,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
   }
 }
 
-##----------------------------------------------------------------------------------
-## Provides an S3 bucket Object Lock configuration resource.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_object_lock_configuration" "example" {
   count = var.create_bucket && var.object_lock_configuration != null ? 1 : 0
 
@@ -104,9 +76,6 @@ resource "aws_s3_bucket_object_lock_configuration" "example" {
   }
 }
 
-##----------------------------------------------------------------------------------
-## Provides an S3 bucket CORS configuration resource.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_cors_configuration" "example" {
   count = var.create_bucket && var.cors_rule != null ? 1 : 0
 
@@ -125,9 +94,6 @@ resource "aws_s3_bucket_cors_configuration" "example" {
   }
 }
 
-##----------------------------------------------------------------------------------
-## Provides an S3 bucket website configuration resource.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_website_configuration" "example" {
   count = var.create_bucket && var.website_config_enable == true ? 1 : 0
 
@@ -165,9 +131,6 @@ locals {
   ])
 }
 
-##----------------------------------------------------------------------------------
-## Provides an S3 bucket ACL resource.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_acl" "default" {
 
   count  = var.create_bucket ? var.grants != null ? var.acl != null ? 1 : 0 : 0 : 0
@@ -200,9 +163,6 @@ resource "aws_s3_bucket_acl" "default" {
   }
 }
 
-##----------------------------------------------------------------------------------
-## Provides an independent configuration resource for S3 bucket lifecycle configuration.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_lifecycle_configuration" "default" {
   count  = var.create_bucket && var.enable_lifecycle_configuration_rules == true ? 1 : 0
   bucket = join("", aws_s3_bucket.s3_default.*.id)
@@ -301,9 +261,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "default" {
   ]
 }
 
-##----------------------------------------------------------------------------------
-## Provides an independent configuration resource for S3 bucket replication configuration.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_replication_configuration" "this" {
   count = var.create_bucket && length(keys(var.replication_configuration)) > 0 ? 1 : 0
 
@@ -316,7 +273,7 @@ resource "aws_s3_bucket_replication_configuration" "this" {
     content {
       id       = try(rule.value.id, null)
       priority = try(rule.value.priority, null)
-      prefix   = try(rule.value.prefix, null)
+      filter   = try(rule.value.prefix, null)
       status   = try(tobool(rule.value.status) ? "Enabled" : "Disabled", title(lower(rule.value.status)), "Enabled")
 
       dynamic "delete_marker_replication" {
@@ -475,9 +432,6 @@ locals {
 
 }
 
-##----------------------------------------------------------------------------------
-## Manages S3 bucket-level Public Access Block configuration.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_public_access_block" "this" {
   count = var.create_bucket && var.attach_public_policy ? 1 : 0
 
@@ -489,9 +443,6 @@ resource "aws_s3_bucket_public_access_block" "this" {
   restrict_public_buckets = var.restrict_public_buckets
 }
 
-##----------------------------------------------------------------------------------
-## Provides a resource to manage S3 Bucket Ownership Controls.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_ownership_controls" "this" {
   count = var.create_bucket && var.control_object_ownership ? 1 : 0
 
