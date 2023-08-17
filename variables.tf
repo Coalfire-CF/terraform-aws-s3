@@ -1,39 +1,7 @@
-#Module      : LABEL
-#Description : Terraform label module variables.
 variable "name" {
   type        = string
   default     = ""
-  description = "Name  (e.g. `app` or `cluster`)."
-}
-
-variable "repository" {
-  type        = string
-  default     = "https://github.com/clouddrove/terraform-aws-s3"
-  description = "Terraform current module repo"
-}
-
-variable "environment" {
-  type        = string
-  default     = ""
-  description = "Environment (e.g. `prod`, `dev`, `staging`)."
-}
-
-variable "label_order" {
-  type        = list(any)
-  default     = []
-  description = "Label order, e.g. `name`,`application`."
-}
-
-variable "managedby" {
-  type        = string
-  default     = "hello@clouddrove.com"
-  description = "ManagedBy, eg 'CloudDrove'."
-}
-
-variable "delimiter" {
-  type        = string
-  default     = "-"
-  description = "Delimiter to be used between `organization`, `environment`, `name` and `attributes`."
+  description = "Name of RDS"
 }
 
 variable "tags" {
@@ -42,8 +10,6 @@ variable "tags" {
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
 }
 
-# Module      : S3 BUCKET
-# Description : Terraform S3 Bucket module variables.
 variable "create_bucket" {
   type        = bool
   default     = true

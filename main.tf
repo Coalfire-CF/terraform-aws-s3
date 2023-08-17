@@ -27,10 +27,6 @@ resource "aws_s3_bucket_request_payment_configuration" "example" {
   payer  = "Requester"
 }
 
-##----------------------------------------------------------------------------------
-## Provides a resource for controlling versioning on an S3 bucket.
-## Deleting this resource will either suspend versioning on the associated S3 bucket or simply remove the resource from Terraform state if the associated S3 bucket is unversioned.
-##----------------------------------------------------------------------------------
 resource "aws_s3_bucket_versioning" "example" {
   count = var.create_bucket && var.versioning == true ? 1 : 0
 
