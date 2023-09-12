@@ -146,15 +146,6 @@ No modules.
 | <a name="output_arn"></a> [arn](#output\_arn) | The ARN of the s3 bucket. |
 | <a name="output_bucket_domain_name"></a> [bucket\_domain\_name](#output\_bucket\_domain\_name) | The Domain of the s3 bucket. |
 | <a name="output_id"></a> [id](#output\_id) | The ID of the s3 bucket. |
-
-
-## Inputs
-
-No inputs.
-
-## Outputs
-
-No outputs.
 <!-- END_TF_DOCS -->
 
 ## Contributing
