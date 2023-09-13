@@ -36,7 +36,7 @@ variable "mfa_delete" {
 
 variable "enable_server_side_encryption" {
   type        = bool
-  default     = false
+  default     = true
   description = "Enable enable_server_side_encryption"
 }
 
@@ -48,7 +48,7 @@ variable "sse_algorithm" {
 
 variable "enable_kms" {
   type        = bool
-  default     = false
+  default     = true
   description = "Enable enable_server_side_encryption"
 }
 
