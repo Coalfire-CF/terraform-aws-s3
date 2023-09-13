@@ -99,9 +99,9 @@ No modules.
 | <a name="input_control_object_ownership"></a> [control\_object\_ownership](#input\_control\_object\_ownership) | Whether to manage S3 Bucket Ownership Controls on this bucket. | `bool` | `false` | no |
 | <a name="input_cors_rule"></a> [cors\_rule](#input\_cors\_rule) | CORS Configuration specification for this bucket | <pre>list(object({<br>    allowed_headers = list(string)<br>    allowed_methods = list(string)<br>    allowed_origins = list(string)<br>    expose_headers  = list(string)<br>    max_age_seconds = number<br>  }))</pre> | `null` | no |
 | <a name="input_create_bucket"></a> [create\_bucket](#input\_create\_bucket) | Conditionally create S3 bucket. | `bool` | `true` | no |
-| <a name="input_enable_kms"></a> [enable\_kms](#input\_enable\_kms) | Enable enable\_server\_side\_encryption | `bool` | `false` | no |
+| <a name="input_enable_kms"></a> [enable\_kms](#input\_enable\_kms) | Enable enable\_server\_side\_encryption | `bool` | `true` | no |
 | <a name="input_enable_lifecycle_configuration_rules"></a> [enable\_lifecycle\_configuration\_rules](#input\_enable\_lifecycle\_configuration\_rules) | enable or disable lifecycle\_configuration\_rules | `bool` | `false` | no |
-| <a name="input_enable_server_side_encryption"></a> [enable\_server\_side\_encryption](#input\_enable\_server\_side\_encryption) | Enable enable\_server\_side\_encryption | `bool` | `false` | no |
+| <a name="input_enable_server_side_encryption"></a> [enable\_server\_side\_encryption](#input\_enable\_server\_side\_encryption) | Enable enable\_server\_side\_encryption | `bool` | `true` | no |
 | <a name="input_error_document"></a> [error\_document](#input\_error\_document) | he name of the error document for the website | `string` | `"error.html"` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable. | `bool` | `false` | no |
 | <a name="input_grants"></a> [grants](#input\_grants) | ACL Policy grant.conflict with acl.set acl null to use this | <pre>list(object({<br>    id          = string<br>    type        = string<br>    permissions = list(string)<br>    uri         = string<br>  }))</pre> | `null` | no |
