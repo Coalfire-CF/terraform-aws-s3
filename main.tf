@@ -96,19 +96,19 @@ resource "aws_s3_bucket_website_configuration" "example" {
   bucket = join("", aws_s3_bucket.s3_default.*.id)
 
   index_document {
-    suffix = "index.html"
+    suffix = var.index_document
   }
 
   error_document {
-    key = "error.html"
+    key = var.error_document
   }
 
   routing_rule {
     condition {
-      key_prefix_equals = "docs/"
+      key_prefix_equals = var.routing_rule
     }
     redirect {
-      replace_key_prefix_with = "documents/"
+      replace_key_prefix_with = var.redirect
     }
   }
 }
@@ -125,38 +125,6 @@ locals {
         }
       ]
   ])
-}
-
-resource "aws_s3_bucket_acl" "default" {
-
-  count  = var.create_bucket ? var.grants != null ? var.acl != null ? 1 : 0 : 0 : 0
-  bucket = join("", aws_s3_bucket.s3_default.*.id)
-
-
-  acl = try(length(local.acl_grants), 0) == 0 ? var.acl : null
-
-  dynamic "access_control_policy" {
-    for_each = try(length(local.acl_grants), 0) == 0 || try(length(var.acl), 0) > 0 ? [] : [1]
-
-    content {
-      dynamic "grant" {
-        for_each = local.acl_grants
-
-        content {
-          grantee {
-            id   = grant.value.id
-            type = grant.value.type
-            uri  = grant.value.uri
-          }
-          permission = grant.value.permission
-        }
-      }
-
-      owner {
-        id = var.owner_id
-      }
-    }
-  }
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "default" {
@@ -253,7 +221,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "default" {
 
   depends_on = [
     # versioning must be set before lifecycle configuration
-    aws_s3_bucket_versioning.example
+    aws_s3_bucket_versioning.example[0]
   ]
 }
 
@@ -284,8 +252,8 @@ resource "aws_s3_bucket_ownership_controls" "this" {
 
   # This `depends_on` is to prevent "A conflicting conditional operation is currently in progress against this resource."
   depends_on = [
-    aws_s3_bucket_policy.s3_default,
-    aws_s3_bucket_public_access_block.this,
-    aws_s3_bucket.s3_default
+    aws_s3_bucket_policy.s3_default[0],
+    aws_s3_bucket_public_access_block.this[0],
+    aws_s3_bucket.s3_default[0]
   ]
 }

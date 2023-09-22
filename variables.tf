@@ -1,6 +1,5 @@
 variable "name" {
   type        = string
-  default     = ""
   description = "Name of S3 bucket"
 }
 
@@ -49,12 +48,13 @@ variable "sse_algorithm" {
 variable "enable_kms" {
   type        = bool
   default     = true
-  description = "Enable enable_server_side_encryption"
+  description = "Enable KMS key for enable_server_side_encryption"
 }
 
 variable "kms_master_key_id" {
   type        = string
- description = "The AWS KMS master key ID used for the SSE-KMS encryption. This can only be used when you set the value of sse_algorithm as aws:kms. The default aws/s3 AWS KMS master key is used if this element is absent while the sse_algorithm is aws:kms."
+  description = "The AWS KMS master key ID used for the SSE-KMS encryption. This can only be used when you set the value of sse_algorithm as aws:kms. The default aws/s3 AWS KMS master key is used if this element is absent while the sse_algorithm is aws:kms."
+  default = null
 }
 
 variable "enable_lifecycle_configuration_rules" {
@@ -172,6 +172,7 @@ variable "aws_iam_policy_document" {
   default     = ""
   sensitive   = true
   description = "The text of the policy. Although this is a bucket policy rather than an IAM policy, the aws_iam_policy_document data source may be used, so long as it specifies a principal. For more information about building AWS IAM policy documents with Terraform, see the AWS IAM Policy Document Guide. Note: Bucket policies are limited to 20 KB in size."
+  #https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document
 }
 
 variable "bucket_policy" {
@@ -240,7 +241,7 @@ variable "error_document" {
 variable "routing_rule" {
   type        = string
   default     = "docs/"
-  description = "ist of rules that define when a redirect is applied and the redirect behavior "
+  description = "List of rules that define when a redirect is applied and the redirect behavior "
 }
 variable "redirect" {
   type        = string

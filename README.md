@@ -34,12 +34,13 @@ This module can be called as outlined below.
 Include example for how to call the module below with generic variables
 
 ```hcl
-provider "azurerm" {
+provider "aws" {
   features {}
 }
 
 module "core_sa" {
   source                    = "github.com/Coalfire-CF/ACE-AWS-S3?ref=vX.X.X"
+  
   
 }
 ```
