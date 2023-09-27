@@ -4,8 +4,13 @@
 </div>
 
 
-## ACE AWS S3
+# AWS S3 Terraform Module
 
+## Description
+
+This module creates an S3 bucket with a bucket policy, versioning enabled, logging enabled, and a bucket lifecycle policy configured.
+
+FedRAMP Compliance: Moderate, High
 
 ## Dependencies
 
@@ -13,12 +18,8 @@
 
 ## Resource List
 
-Insert a high-level list of resources created as a part of this module. E.g.
-
 - S3 bucket
 - S3 bucket IAM policies
-
-## Code Updates
 
 ## Deployment Steps
 
@@ -38,10 +39,10 @@ provider "aws" {
   features {}
 }
 
-module "core_sa" {
-  source                    = "github.com/Coalfire-CF/ACE-AWS-S3?ref=vX.X.X"
+module "s3_bucket" {
+  source = "github.com/Coalfire-CF/terraform-aws-s3"
   
-  
+  name = "s3-bucket-name"
 }
 ```
 
