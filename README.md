@@ -1,8 +1,4 @@
-<div align="center">
-<img src="coalfire_logo.png" width="200">
-
-</div>
-
+![Coalfire](coalfire_logo.png)
 
 # AWS S3 Terraform Module
 
