@@ -21,18 +21,6 @@ variable "versioning" {
   description = "Enable Versioning of S3."
 }
 
-variable "acl" {
-  type        = string
-  default     = null
-  description = "Canned ACL to apply to the S3 bucket."
-}
-
-variable "mfa_delete" {
-  type        = bool
-  default     = false
-  description = "Enable MFA delete for either Change the versioning state of your bucket or Permanently delete an object version."
-}
-
 variable "enable_server_side_encryption" {
   type        = bool
   default     = true
@@ -54,116 +42,57 @@ variable "enable_kms" {
 variable "kms_master_key_id" {
   type        = string
   description = "The AWS KMS master key ID used for the SSE-KMS encryption. This can only be used when you set the value of sse_algorithm as aws:kms. The default aws/s3 AWS KMS master key is used if this element is absent while the sse_algorithm is aws:kms."
-  default = null
+  default     = null
 }
 
 variable "enable_lifecycle_configuration_rules" {
   type        = bool
-  default     = false
+  default     = true
   description = "enable or disable lifecycle_configuration_rules"
 }
 
 variable "lifecycle_configuration_rules" {
   type = list(object({
     id      = string
-    prefix  = string
+    prefix  = optional(string, null)
     enabled = bool
-    tags    = map(string)
+    tags    = optional(map(string), null)
 
-    enable_glacier_transition            = bool
-    enable_deeparchive_transition        = bool
-    enable_standard_ia_transition        = bool
-    enable_current_object_expiration     = bool
-    enable_noncurrent_version_expiration = bool
+    enable_glacier_transition            = optional(bool, true)
+    enable_deeparchive_transition        = optional(bool, false)
+    enable_standard_ia_transition        = optional(bool, false)
+    enable_current_object_expiration     = optional(bool, true)
+    enable_noncurrent_version_expiration = optional(bool, true)
 
-    abort_incomplete_multipart_upload_days         = number
-    noncurrent_version_glacier_transition_days     = number
-    noncurrent_version_deeparchive_transition_days = number
-    noncurrent_version_expiration_days             = number
+    abort_incomplete_multipart_upload_days         = optional(number, null)
+    noncurrent_version_glacier_transition_days     = optional(number, null)
+    noncurrent_version_deeparchive_transition_days = optional(number, null)
+    noncurrent_version_expiration_days             = optional(number, null)
 
-    standard_transition_days    = number
-    glacier_transition_days     = number
-    deeparchive_transition_days = number
-    expiration_days             = number
+    standard_transition_days    = optional(number, null)
+    glacier_transition_days     = optional(number, null)
+    deeparchive_transition_days = optional(number, null)
+    expiration_days             = optional(number, null)
   }))
-  default     = null
+  default = [
+    {
+      id      = "default"
+      enabled = true
+
+      enable_glacier_transition            = true
+      enable_current_object_expiration     = true
+      enable_noncurrent_version_expiration = true
+
+      abort_incomplete_multipart_upload_days     = 1
+      noncurrent_version_glacier_transition_days = 90
+      noncurrent_version_expiration_days         = 365
+      glacier_transition_days                    = 90
+      expiration_days                            = 365
+    }
+  ]
   description = "A list of lifecycle rules"
 }
 
-variable "lifecycle_infrequent_storage_transition_enabled" {
-  type        = bool
-  default     = false
-  description = "Specifies infrequent storage transition lifecycle rule status."
-}
-
-variable "lifecycle_infrequent_storage_object_prefix" {
-  type        = string
-  default     = ""
-  sensitive   = true
-  description = "Object key prefix identifying one or more objects to which the lifecycle rule applies."
-}
-
-variable "lifecycle_days_to_infrequent_storage_transition" {
-  type        = number
-  default     = 60
-  description = "Specifies the number of days after object creation when it will be moved to standard infrequent access storage."
-}
-
-variable "lifecycle_glacier_transition_enabled" {
-  type        = bool
-  default     = false
-  description = "Specifies Glacier transition lifecycle rule status."
-}
-
-variable "lifecycle_glacier_object_prefix" {
-  type        = string
-  default     = ""
-  sensitive   = true
-  description = "Object key prefix identifying one or more objects to which the lifecycle rule applies."
-}
-
-variable "lifecycle_days_to_deep_archive_transition" {
-  type        = number
-  default     = 180
-  description = "Specifies the number of days after object creation when it will be moved to DEEP ARCHIVE ."
-}
-
-variable "lifecycle_deep_archive_transition_enabled" {
-  type        = bool
-  default     = false
-  description = "Specifies DEEP ARCHIVE transition lifecycle rule status."
-}
-
-variable "lifecycle_deep_archive_object_prefix" {
-  type        = string
-  default     = ""
-  sensitive   = true
-  description = "Object key prefix identifying one or more objects to which the lifecycle rule applies."
-}
-
-variable "lifecycle_days_to_glacier_transition" {
-  type        = number
-  default     = 180
-  description = "Specifies the number of days after object creation when it will be moved to Glacier storage."
-}
-
-variable "lifecycle_expiration_enabled" {
-  type        = bool
-  default     = false
-  description = "Specifies expiration lifecycle rule status."
-}
-
-variable "lifecycle_expiration_object_prefix" {
-  type        = string
-  default     = ""
-  description = "Object key prefix identifying one or more objects to which the lifecycle rule applies."
-}
-
-variable "lifecycle_days_to_expiration" {
-  type        = number
-  default     = 365
-  description = "Specifies the number of days after object creation when the object expires."
-}
 
 # Module      : S3 BUCKET POLICY
 # Description : Terraform S3 Bucket Policy module variables.
@@ -185,41 +114,6 @@ variable "force_destroy" {
   type        = bool
   default     = false
   description = "A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable."
-}
-
-variable "bucket_prefix" {
-  type        = string
-  default     = null
-  description = " (Optional, Forces new resource) Creates a unique bucket name beginning with the specified prefix."
-}
-
-variable "grants" {
-  type = list(object({
-    id          = string
-    type        = string
-    permissions = list(string)
-    uri         = string
-  }))
-  default     = null
-  description = "ACL Policy grant.conflict with acl.set acl null to use this"
-}
-
-variable "acl_grants" {
-  type = list(object({
-    id         = string
-    type       = string
-    permission = string
-    uri        = string
-  }))
-  default = null
-
-  description = "A list of policy grants for the bucket. Conflicts with `acl`. Set `acl` to `null` to use this."
-}
-
-variable "owner_id" {
-  type        = string
-  default     = ""
-  description = "The canonical user ID associated with the AWS account."
 }
 
 variable "website_config_enable" {
@@ -301,12 +195,6 @@ variable "cors_rule" {
   }))
   default     = null
   description = "CORS Configuration specification for this bucket"
-}
-
-variable "replication_configuration" {
-  description = "Map containing cross-region replication configuration."
-  type        = any
-  default     = {}
 }
 
 variable "attach_public_policy" {
