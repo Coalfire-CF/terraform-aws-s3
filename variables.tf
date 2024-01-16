@@ -47,34 +47,49 @@ variable "kms_master_key_id" {
 
 variable "enable_lifecycle_configuration_rules" {
   type        = bool
-  default     = false
+  default     = true
   description = "enable or disable lifecycle_configuration_rules"
 }
 
 variable "lifecycle_configuration_rules" {
   type = list(object({
     id      = string
-    prefix  = string
+    prefix  = optional(string, null)
     enabled = bool
-    tags    = map(string)
+    tags    = optional(map(string), null)
 
-    enable_glacier_transition            = bool
-    enable_deeparchive_transition        = bool
-    enable_standard_ia_transition        = bool
-    enable_current_object_expiration     = bool
-    enable_noncurrent_version_expiration = bool
+    enable_glacier_transition            = optional(bool, true)
+    enable_deeparchive_transition        = optional(bool, false)
+    enable_standard_ia_transition        = optional(bool, false)
+    enable_current_object_expiration     = optional(bool, true)
+    enable_noncurrent_version_expiration = optional(bool, true)
 
-    abort_incomplete_multipart_upload_days         = number
-    noncurrent_version_glacier_transition_days     = number
-    noncurrent_version_deeparchive_transition_days = number
-    noncurrent_version_expiration_days             = number
+    abort_incomplete_multipart_upload_days         = optional(number, null)
+    noncurrent_version_glacier_transition_days     = optional(number, null)
+    noncurrent_version_deeparchive_transition_days = optional(number, null)
+    noncurrent_version_expiration_days             = optional(number, null)
 
-    standard_transition_days    = number
-    glacier_transition_days     = number
-    deeparchive_transition_days = number
-    expiration_days             = number
+    standard_transition_days    = optional(number, null)
+    glacier_transition_days     = optional(number, null)
+    deeparchive_transition_days = optional(number, null)
+    expiration_days             = optional(number, null)
   }))
-  default     = null
+  default = [
+    {
+      id      = "default"
+      enabled = true
+
+      enable_glacier_transition            = true
+      enable_current_object_expiration     = true
+      enable_noncurrent_version_expiration = true
+
+      abort_incomplete_multipart_upload_days     = 1
+      noncurrent_version_glacier_transition_days = 90
+      noncurrent_version_expiration_days         = 365
+      glacier_transition_days                    = 90
+      expiration_days                            = 365
+    }
+  ]
   description = "A list of lifecycle rules"
 }
 
