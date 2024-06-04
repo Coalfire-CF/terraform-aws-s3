@@ -37,8 +37,36 @@ provider "aws" {
 
 module "s3_bucket" {
   source = "github.com/Coalfire-CF/terraform-aws-s3"
-  
-  name = "s3-bucket-name"
+
+  name   = "s3-bucket-name"
+  enable_lifecycle_configuration_rules = true
+  #  lifecycle_configuration_rules = [
+  #    {
+  #      id      = string
+  #      prefix  = optional(string, null)
+  #      enabled = bool
+  #      tags    = optional(map(string), null)
+  #
+  #      enable_glacier_transition            = optional(bool, true)
+  #      enable_deeparchive_transition        = optional(bool, false)
+  #      enable_standard_ia_transition        = optional(bool, false)
+  #      enable_current_object_expiration     = optional(bool, true)
+  #      enable_noncurrent_version_expiration = optional(bool, true)
+  #
+  #      abort_incomplete_multipart_upload_days         = optional(number, null)
+  #      noncurrent_version_glacier_transition_days     = optional(number, null)
+  #      noncurrent_version_deeparchive_transition_days = optional(number, null)
+  #      noncurrent_version_expiration_days             = optional(number, null)
+  #
+  #      standard_transition_days    = optional(number, null)
+  #      glacier_transition_days     = optional(number, null)
+  #      deeparchive_transition_days = optional(number, null)
+  #      expiration_days             = optional(number, null)
+  #    }
+  #  ]
+  enable_kms                    = true
+  enable_server_side_encryption = true
+  kms_master_key_id             = var.kms_master_key_id
 }
 ```
 
