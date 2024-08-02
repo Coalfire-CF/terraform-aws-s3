@@ -126,13 +126,31 @@ resource "aws_s3_bucket_lifecycle_configuration" "default" {
       id     = rule.value.id
       status = rule.value.enabled == true ? "Enabled" : "Disabled"
 
-      # Filter is always required due to https://github.com/hashicorp/terraform-provider-aws/issues/23299
-      filter {
-        dynamic "and" {
-          for_each = (try(length(rule.value.prefix), 0) + try(length(rule.value.tags), 0)) > 0 ? [1] : []
-          content {
-            prefix = rule.value.prefix == null ? "" : rule.value.prefix
-            tags   = try(length(rule.value.tags), 0) > 0 ? rule.value.tags : {}
+      # Case when only prefix is present, no tags
+      dynamic "filter" {
+        for_each = (try(length(rule.value.prefix), 0) > 0 && try(length(rule.value.tags), 0) == 0) ? [1] : []
+        content {
+          prefix = rule.value.prefix
+        }
+      }
+
+      # Case when prefix and one or more tags are present
+      dynamic "filter" {
+        for_each = (try(length(rule.value.prefix), 0) > 0 && try(length(rule.value.tags), 0) > 0) ? [1] : []
+        content {
+          and {
+            prefix = rule.value.prefix
+            tags   = rule.value.tags
+          }
+        }
+      }
+
+      # Case when no prefix and one or more tags are present
+      dynamic "filter" {
+        for_each = (try(length(rule.value.prefix), 0) == 0 && try(length(rule.value.tags), 0) > 0) ? [1] : []
+        content {
+          and {
+            tags = rule.value.tags
           }
         }
       }
