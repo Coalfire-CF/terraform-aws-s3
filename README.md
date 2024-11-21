@@ -70,6 +70,28 @@ module "s3_bucket" {
 }
 ```
 
+If you do not specify lifecycle rules when calling this module, none will be created.
+Custom lifecycle rules:
+```
+enable_lifecycle_configuration_rules = true
+lifecycle_configuration_rules = [
+    {
+      id      = "default"
+      enabled = true
+
+      enable_glacier_transition            = true
+      enable_current_object_expiration     = true
+      enable_noncurrent_version_expiration = true
+
+      abort_incomplete_multipart_upload_days     = 1
+      noncurrent_version_glacier_transition_days = 90
+      noncurrent_version_expiration_days         = 365
+      glacier_transition_days                    = 90
+      expiration_days                            = 365
+    }
+  ]
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
