@@ -47,15 +47,15 @@ variable "kms_master_key_id" {
 
 variable "enable_lifecycle_configuration_rules" {
   type        = bool
-  default     = true
+  default     = false
   description = "enable or disable lifecycle_configuration_rules"
 }
 
 variable "lifecycle_configuration_rules" {
   type = list(object({
-    id      = string
+    id      = optional(string)
     prefix  = optional(string, null)
-    enabled = bool
+    enabled = optional(bool)
     tags    = optional(map(string), null)
 
     enable_glacier_transition            = optional(bool, true)
@@ -74,22 +74,7 @@ variable "lifecycle_configuration_rules" {
     deeparchive_transition_days = optional(number, null)
     expiration_days             = optional(number, null)
   }))
-  default = [
-    {
-      id      = "default"
-      enabled = true
-
-      enable_glacier_transition            = true
-      enable_current_object_expiration     = true
-      enable_noncurrent_version_expiration = true
-
-      abort_incomplete_multipart_upload_days     = 1
-      noncurrent_version_glacier_transition_days = 90
-      noncurrent_version_expiration_days         = 365
-      glacier_transition_days                    = 90
-      expiration_days                            = 365
-    }
-  ]
+  default = []
   description = "A list of lifecycle rules"
 }
 
