@@ -1,11 +1,9 @@
 name: Org Release
 on:
-    pull_request:
-        types:
-        - closed
-        branches:
-        - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   create-release:
-    uses: Coalfire-CF/Actions/.github/workflows/org-release.yml@main
+    uses: AndyMills-CloudBeard/Actions/.github/workflows/org-release.yml@44209ad54aaea21f87aa1a4366c3c1c145e87ae5 # v0.0.1
