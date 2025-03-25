@@ -1,6 +1,7 @@
 name: Org Release
+
 on:
-  pull_request:
+  push:
     branches:
       - main
 
