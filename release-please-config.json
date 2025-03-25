@@ -1,7 +1,7 @@
 {
   "packages": {
     ".": {
-      "release-type": "terraform",
+      "release-type": "terraform-module",
       "draft": false,
       "changelog-path": "CHANGELOG.md",
       "changelog-sections": [
