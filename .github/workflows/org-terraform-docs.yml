@@ -1,7 +1,8 @@
 name: Org Terraform Docs
+
 on:
-    pull_request:
-    workflow_call:
+  pull_request:
+  workflow_call:
 
 jobs:
   terraform-docs:
