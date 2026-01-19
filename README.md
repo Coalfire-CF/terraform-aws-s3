@@ -248,7 +248,6 @@ Copyright © 2023 Coalfire Systems Inc.
 .
 |-- CONTRIBUTING.md
 |-- LICENSE
-|-- License.md
 |-- README.md
 |-- coalfire_logo.png
 |-- main.tf
