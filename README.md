@@ -250,9 +250,15 @@ Copyright © 2023 Coalfire Systems Inc.
 |-- LICENSE
 |-- README.md
 |-- coalfire_logo.png
+|-- example
+|   |-- example.auto.tfvars
+|   |-- main.tf
+|   |-- outputs.tf
+|   |-- providers.tf
+|   |-- variables.tf
 |-- main.tf
 |-- outputs.tf
-|-- providers.tf
 |-- release-please-config.json
+|-- required_providers.tf
 |-- variables.tf
 ```
