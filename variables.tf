@@ -74,10 +74,9 @@ variable "lifecycle_configuration_rules" {
     deeparchive_transition_days = optional(number, null)
     expiration_days             = optional(number, null)
   }))
-  default = []
+  default     = []
   description = "A list of lifecycle rules"
 }
-
 
 # Module      : S3 BUCKET POLICY
 # Description : Terraform S3 Bucket Policy module variables.
@@ -112,16 +111,19 @@ variable "index_document" {
   default     = "index.html"
   description = "The name of the index document for the website"
 }
+
 variable "error_document" {
   type        = string
   default     = "error.html"
   description = "he name of the error document for the website "
 }
+
 variable "routing_rule" {
   type        = string
   default     = "docs/"
   description = "List of rules that define when a redirect is applied and the redirect behavior "
 }
+
 variable "redirect" {
   type        = string
   default     = "documents/"
@@ -157,7 +159,6 @@ variable "request_payer" {
   default     = false
   description = "Specifies who should bear the cost of Amazon S3 data transfer. Can be either BucketOwner or Requester. By default, the owner of the S3 bucket would incur the costs of any data transfer"
 }
-
 
 variable "object_lock_configuration" {
   type = object({
@@ -246,6 +247,7 @@ variable "object_ownership" {
   type        = string
   default     = "ObjectWriter"
 }
+
 variable "attach_policy" {
   description = "Controls if S3 bucket should have bucket policy attached (set to `true` to use value of `policy` as bucket policy)"
   type        = bool
