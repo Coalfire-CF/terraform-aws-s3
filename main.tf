@@ -13,21 +13,21 @@ resource "aws_s3_bucket_policy" "s3_default" {
   policy = var.aws_iam_policy_document
 }
 
-resource "aws_s3_bucket_accelerate_configuration" "example" {
+resource "aws_s3_bucket_accelerate_configuration" "bucket_accelerate_configuration" {
   count = var.create_bucket && var.acceleration_status == true ? 1 : 0
 
   bucket = join("", aws_s3_bucket.s3_default[*].id)
   status = "Enabled"
 }
 
-resource "aws_s3_bucket_request_payment_configuration" "example" {
+resource "aws_s3_bucket_request_payment_configuration" "bucket_request_payment_configuration" {
   count = var.create_bucket && var.request_payer == true ? 1 : 0
 
   bucket = join("", aws_s3_bucket.s3_default[*].id)
   payer  = "Requester"
 }
 
-resource "aws_s3_bucket_versioning" "example" {
+resource "aws_s3_bucket_versioning" "bucket_versioning" {
   count = var.create_bucket && var.versioning == true ? 1 : 0
 
   bucket = join("", aws_s3_bucket.s3_default[*].id)
@@ -36,7 +36,7 @@ resource "aws_s3_bucket_versioning" "example" {
   }
 }
 
-resource "aws_s3_bucket_logging" "example" {
+resource "aws_s3_bucket_logging" "bucket_logging" {
   count  = var.create_bucket && var.logging == true ? 1 : 0
   bucket = join("", aws_s3_bucket.s3_default[*].id)
 
@@ -44,7 +44,7 @@ resource "aws_s3_bucket_logging" "example" {
   target_prefix = var.target_prefix
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
+resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_server_side_encryption_configuration" {
   count  = var.create_bucket && var.enable_server_side_encryption == true ? 1 : 0
   bucket = join("", aws_s3_bucket.s3_default[*].id)
 
@@ -56,7 +56,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
   }
 }
 
-resource "aws_s3_bucket_object_lock_configuration" "example" {
+resource "aws_s3_bucket_object_lock_configuration" "bucket_object_lock_configuration" {
   count = var.create_bucket && var.object_lock_configuration != null ? 1 : 0
 
   bucket = join("", aws_s3_bucket.s3_default[*].id)
@@ -72,7 +72,7 @@ resource "aws_s3_bucket_object_lock_configuration" "example" {
   }
 }
 
-resource "aws_s3_bucket_cors_configuration" "example" {
+resource "aws_s3_bucket_cors_configuration" "bucket_cors_configuration" {
   count = var.create_bucket && var.cors_rule != null ? 1 : 0
 
   bucket = join("", aws_s3_bucket.s3_default[*].id)
@@ -90,7 +90,7 @@ resource "aws_s3_bucket_cors_configuration" "example" {
   }
 }
 
-resource "aws_s3_bucket_website_configuration" "example" {
+resource "aws_s3_bucket_website_configuration" "bucket_website_configuration" {
   count = var.create_bucket && var.website_config_enable == true ? 1 : 0
 
   bucket = join("", aws_s3_bucket.s3_default[*].id)
@@ -227,7 +227,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "default" {
 
   depends_on = [
     # versioning must be set before lifecycle configuration
-    aws_s3_bucket_versioning.example[0]
+    aws_s3_bucket_versioning.bucket_versioning[0]
   ]
 }
 
