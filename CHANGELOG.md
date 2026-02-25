@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.2](https://github.com/Coalfire-CF/terraform-aws-s3/compare/v1.1.1...v1.1.2) (2026-02-25)
+
+
+### Miscellaneous
+
+* trigger release ([6a1d79c](https://github.com/Coalfire-CF/terraform-aws-s3/commit/6a1d79c75d45ada96b113f76b1bb9533ffaf9251))
+* trigger release ([edbd10b](https://github.com/Coalfire-CF/terraform-aws-s3/commit/edbd10b7a9d788c09a531cb21cb12f56036bd910))
+
 ## [1.1.1](https://github.com/Coalfire-CF/terraform-aws-s3/compare/v1.1.0...v1.1.1) (2026-02-24)
 
 
